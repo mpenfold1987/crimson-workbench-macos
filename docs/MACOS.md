@@ -38,8 +38,7 @@ and save/reload verification; other item types have not been verified live.
 
 ## Install the preview
 
-Download **Crimson Workbench.dmg** from the repository's
-[latest release](https://github.com/mpenfold1987/crimson-workbench-macos/releases/latest).
+Download the DMG from the repository's [latest release](https://github.com/mpenfold1987/crimson-workbench-macos/releases/latest).
 Open the DMG, drag Crimson Workbench to Applications, then Control-click the app
 and choose **Open** the first time if macOS shows an unidentified-developer
 warning. The preview is ad-hoc signed and is not notarized.
