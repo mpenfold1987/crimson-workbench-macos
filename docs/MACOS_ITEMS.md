@@ -195,9 +195,42 @@ actor+0x108, then +0x110, and calls 0x100bdf800. The subsequent routine at
 0x100bdfa74 resolves a live actor, checks registration state, and constructs a
 native transaction. A catalog character key cannot substitute for that actor ID.
 
-For one natural horse registration, launch the existing runtime with
-CW_MAC_MOUNT_TRACE=1. This exact-build trace replaces only the normal registration
-dispatch callback, records bounded request bytes and context addresses, and
-forwards the original call unchanged. It exposes no item or mount grant endpoint.
-Without that variable, the item runtime follows its existing behavior.
-The trace compiles with warnings treated as errors; live input capture is pending.
+The temporary purchase/registration trace captured a normal horse purchase and
+the resulting stable-list acknowledgement. That trace has been removed from the
+shipping module.
+
+## Live mount registration
+
+A normal horse purchase was observed through BuyStockFromStore and a subsequent
+MercenaryDataList acknowledgement. No purchase is replayed by Workbench.
+
+The pinned binary also contains the direct stable-registration method at
+0x100bcc1f0. It accepts the owning server component, a 16-bit character type,
+a customization sentinel, and a flag. Its implementation checks stable capacity,
+builds native registration data through 0x101c4de70, reads native dates, and executes
+the transaction through 0x100c07ea8. This path needs no world animal to tame.
+
+The Mac module now accepts mount_grant (operation 5, exactly one animal) and
+mount_status (operation 6). Item operation numbers are unchanged. Mount IDs
+resolve through CharacterInfoManager at 0x1085a7b90. The server actor component
+at +0x108 supplies the stable component at +0x110; its +8 owner must match.
+The stable collection begins at component+0x18; entries identify native
+character type at +0x20 and mercenary number at +0x28.
+
+A grant requires an unchanged verified local character, no already-owned type,
+and a readable bounded stable snapshot. Success requires exactly one added
+identity of the requested type and preservation of the existing identities.
+Any native error or unexpected result blocks further grants for the session.
+Saved request IDs support receipt lookup without automatic resubmission.
+The Mounts detail panel exposes the explicit live action on macOS and uses the
+existing backed-up launcher.
+
+Focused native, desktop and frontend checks passed. The first live trial
+registered an unowned raptor (catalog key 1000265, native type 6810). The native
+method returned zero; the stable gained exactly one identity and preserved every
+old identity. The user confirmed the raptor appears and can be summoned/ridden.
+A subsequent read of the saved stable confirmed one raptor entry. Loading that
+save again and other species remain separate verification steps. The packaged
+launcher retains a hash-verified module copy per launch so app updates cannot
+replace code loaded by a running game.
+This feature is isolated on feat/live-macos-mounts, outside upstream PR 11.

@@ -166,7 +166,7 @@ mod tests {
         fs::create_dir_all(source.join("user")).unwrap();
         fs::write(source.join("user/slot"), b"synthetic save").unwrap();
         let destination = root.path().join("backup");
-        backup_saves(&[source.clone()], &destination).unwrap();
+        backup_saves(std::slice::from_ref(&source), &destination).unwrap();
         assert_eq!(
             fs::read(destination.join("0/user/slot")).unwrap(),
             b"synthetic save"
@@ -188,9 +188,9 @@ mod tests {
         let root = tempfile::tempdir().unwrap();
         let source = root.path().join("saves");
         fs::create_dir(&source).unwrap();
-        assert!(backup_saves(&[source.clone()], &source.join("backup")).is_err());
+        assert!(backup_saves(std::slice::from_ref(&source), &source.join("backup")).is_err());
         fs::remove_dir(source.join("backup")).unwrap();
-        assert!(backup_saves(&[source.clone()], &root.path().join("empty")).is_err());
+        assert!(backup_saves(std::slice::from_ref(&source), &root.path().join("empty")).is_err());
         fs::write(root.path().join("outside"), b"private").unwrap();
         std::os::unix::fs::symlink(root.path().join("outside"), source.join("link")).unwrap();
         assert!(backup_saves(&[source], &root.path().join("linked")).is_err());
@@ -349,13 +349,25 @@ pub fn launch(game: &Path, resources: &Path, data: &Path) -> Result<Launch> {
     if !game_pids(game)?.is_empty() {
         return Err(error("The game started during backup. Launch cancelled."));
     }
+    // Keep loaded code stable if the app is rebuilt or updated during gameplay.
+    let module_hash =
+        cd_core::fingerprint::hash_file(&library).map_err(|e| error(e.to_string()))?;
+    let launch_library = backup_path.join("libCrimsonItems.dylib");
+    fs::copy(&library, &launch_library).map_err(|e| error(e.to_string()))?;
+    if cd_core::fingerprint::hash_file(&launch_library).map_err(|e| error(e.to_string()))?
+        != module_hash
+    {
+        return Err(error(
+            "The per-launch live module copy could not be verified.",
+        ));
+    }
     let log = fs::OpenOptions::new()
         .create_new(true)
         .write(true)
         .open(backup_path.join("runtime.log"))
         .map_err(|e| error(e.to_string()))?;
     let mut child = std::process::Command::new(executable)
-        .env("DYLD_INSERT_LIBRARIES", library)
+        .env("DYLD_INSERT_LIBRARIES", launch_library)
         .env("SteamAppId", "3321460")
         .env("SteamGameId", "3321460")
         .env_remove("CW_MAC_ITEMS_TEST_ONCE")

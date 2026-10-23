@@ -50,6 +50,8 @@ fn main() {
         "mount_icon",
         "knowledge_snapshot",
         "mount_register",
+        "mount_live_grant",
+        "mount_live_status",
         "skill_unlock_preview",
         "skill_unlock_apply",
         "foreign_preview",

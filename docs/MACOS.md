@@ -101,3 +101,17 @@ Workbench writers; they do not stop Steam from launching the game or prevent
 Steam Cloud from writing. Changed save generations are rejected rather than
 overwritten. Backups are recorded in the registration receipt. Base-entry mounts
 still require in-game summoning and riding verification.
+
+
+## Live mounts
+
+Select a mount in the Mounts screen, then use “Register selected mount live”
+once the live module is connected. If needed, save and close the game first,
+then use “Launch game with live mounts”; this creates a verified save backup.
+Load a save and move briefly to establish the active character.
+
+The action adds one previously unowned mount through the native stable
+transaction. Existing ownership is checked in the loaded character's stable.
+Save normally afterward. The raptor has been confirmed in game; other species
+and variants remain unverified. See MACOS_ITEMS.md for the pinned build and
+recovery limits.
