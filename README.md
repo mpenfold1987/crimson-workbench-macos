@@ -26,7 +26,9 @@ See the [Marketplace guide](docs/MARKETPLACE.md) for individual mods and limits,
 
 ## Install and compatibility
 
-Build or install the native application using the [macOS usage and build notes](docs/MACOS.md).
+Download **Crimson Workbench.dmg** from the [latest macOS release](https://github.com/mpenfold1987/crimson-workbench-macos/releases/latest), open it, and drag the app to Applications. The preview build is ad-hoc signed, so macOS may require you to Control-click the app and choose **Open** the first time.
+
+To build from source, follow the [macOS usage and build notes](docs/MACOS.md).
 It targets Apple Silicon and detects a Steam installation of the game. The app
 checks the exact supported native game build before enabling live inventory
 requests, and creates a verified backup before it starts the game for one.

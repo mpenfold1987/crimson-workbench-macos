@@ -36,21 +36,28 @@ signature, installed mods, or saves. Explicit inventory grants can be autosaved
 by the game. The first one-Timber experiment passed independent UI confirmation
 and save/reload verification; other item types have not been verified live.
 
-## Build
+## Install the preview
+
+Download **Crimson Workbench.dmg** from the repository's
+[latest release](https://github.com/mpenfold1987/crimson-workbench-macos/releases/latest).
+Open the DMG, drag Crimson Workbench to Applications, then Control-click the app
+and choose **Open** the first time if macOS shows an unidentified-developer
+warning. The preview is ad-hoc signed and is not notarized.
+
+## Build from source
 
 Install Apple command-line developer tools, Node 22.22+ and Rust 1.95+.
-From `app/`:
+From the repository root:
 
 ```sh
+cd app
 npm ci
 npm run desktop:mac
 ```
 
 The outputs are under `target/release/bundle/macos/` and
-`target/release/bundle/dmg/`. The platform-specific Tauri configuration preserves
-the upstream Windows installer configuration. Local builds are not Developer ID
-signed or notarized; public distribution requires those separate release steps.
-See [Tauri's macOS packaging documentation](https://tauri.app/distribute/macos-application-bundle/).
+`target/release/bundle/dmg/`. Local builds are not Developer ID signed or
+notarized. See [Tauri's macOS packaging documentation](https://tauri.app/distribute/macos-application-bundle/).
 
 ## Verification
 
