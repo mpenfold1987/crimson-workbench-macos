@@ -24,6 +24,13 @@ Adding ten masks while the game is running. This recording shows an earlier Work
 
 See the [Marketplace guide](docs/MARKETPLACE.md) for individual mods and limits, or the [documentation index](docs/README.md) for detailed guides.
 
+## Planned for macOS
+
+- [ ] **Mounts and equipment:** register supported mounts, add extra sockets to supported equipment, and manage their stones.
+- [ ] **Mod Marketplace:** install and configure skills, journal knowledge, inventory settings, movement mods, live time/weather controls, and more.
+- [ ] **Crafting and Mod Workshop:** plan materials, preview edits to game data, and review changes before applying them.
+- [ ] **Backups and recovery:** preview supported save changes and game-file transactions, keep backups, and restore managed changes.
+
 ## Install and compatibility
 
 Download the DMG from the [latest macOS release](https://github.com/mpenfold1987/crimson-workbench-macos/releases/latest), open it, and drag the app to Applications. The preview build is ad-hoc signed, so macOS may require you to Control-click the app and choose **Open** the first time.
