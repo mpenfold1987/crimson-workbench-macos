@@ -32,10 +32,7 @@
   },
   "bundle": {
     "active": true,
-    "targets": [
-      "nsis"
-    ],
-    "publisher": "Hüseyin Aras",
+    "targets": ["app", "dmg"],
     "category": "Utility",
     "shortDescription": "Local tools for Crimson Desert",
     "license": "MIT",
@@ -44,29 +41,13 @@
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
-      "icons/icon.ico"
+      "icons/icon.icns"
     ],
     "resources": {
       "../../LICENSE": "LICENSE",
       "../../THIRD_PARTY_NOTICES.md": "THIRD_PARTY_NOTICES.md",
-      "../../licenses/": "licenses/",
-      "../../docs/INSTALLATION.md": "INSTALLATION.md",
-      "../../docs/MARKETPLACE.md": "MARKETPLACE.md"
-    },
-    "windows": {
-      "webviewInstallMode": {
-        "type": "downloadBootstrapper",
-        "silent": true
-      },
-      "nsis": {
-        "installMode": "currentUser",
-        "languages": [
-          "English"
-        ],
-        "displayLanguageSelector": false,
-        "startMenuFolder": "Crimson Workbench",
-        "installerHooks": "windows/runtime-hooks.nsh"
-      }
+      "../../docs/MACOS.md": "MACOS.md",
+      "../../docs/MACOS_ITEMS.md": "MACOS_ITEMS.md"
     }
   }
 }

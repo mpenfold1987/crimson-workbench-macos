@@ -3,7 +3,7 @@ fn main() {
         for path in [
             "../../runtime/macos-items/src",
             "../../runtime/macos-items/Makefile",
-            "../../runtime/live-items/src/protocol.h",
+            "../../runtime/macos-items/src/protocol.h",
         ] {
             println!("cargo:rerun-if-changed={path}");
         }

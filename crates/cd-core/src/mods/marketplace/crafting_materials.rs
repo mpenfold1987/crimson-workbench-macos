@@ -257,7 +257,7 @@ mod tests {
         let recipes = table(&blobs, "multichangeinfo").unwrap();
         let count_source = include_str!(concat!(
             env!("CARGO_MANIFEST_DIR"),
-            "/../../runtime/marketplace/crafting/crafting_source_costs.h"
+            "/schemas/crafting-source-costs.h"
         ));
         let encoded = count_source
             .split("kSourceCostCounts{{")

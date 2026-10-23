@@ -782,8 +782,7 @@ mod tests {
     }
     #[test]
     fn shared_native_key_scope_and_codec_are_exact() {
-        let native =
-            include_str!("../../../../runtime/marketplace/consumables/consumables_catalog.h");
+        let native = include_str!("../../schemas/consumables-catalog.h");
         let pattern = regex::Regex::new(r"\{(\d+), Kind::(Arrow|Potion|Healing|Food),").unwrap();
         let native: Vec<_> = pattern
             .captures_iter(native)

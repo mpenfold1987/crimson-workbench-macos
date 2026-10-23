@@ -178,3 +178,26 @@ carried and aggregate inventory delta checks passed. The agent submitted no gran
 in this session. At the user's request, testing stopped after this confirmation.
 Save/reload persistence of this 35-item request has not been checked; the earlier
 single-Timber persistence test remains the verified save/reload evidence.
+
+## Live mount registration investigation (23 October 2026)
+
+The offline mount registration path was confirmed in game by the user. Live
+registration remains under implementation; no live grant endpoint is enabled.
+
+On the hash-pinned Mac executable above, RTTI and resolved chained fixups identify
+the hire cheat decoder at 0x1009f8dc4 (vtable dispatch slot 0x107e43cd8). Its
+handler at 0x1008a0a20 is a single RET instruction, so this is not a grant path.
+
+The normal frame-event registration decoder is 0x1009f9ce0 (dispatch slot
+0x107e44158). It decodes a position-like object, a 12-byte value, and an actor
+identifier before calling 0x1008a0ea4. That handler obtains a component through
+actor+0x108, then +0x110, and calls 0x100bdf800. The subsequent routine at
+0x100bdfa74 resolves a live actor, checks registration state, and constructs a
+native transaction. A catalog character key cannot substitute for that actor ID.
+
+For one natural horse registration, launch the existing runtime with
+CW_MAC_MOUNT_TRACE=1. This exact-build trace replaces only the normal registration
+dispatch callback, records bounded request bytes and context addresses, and
+forwards the original call unchanged. It exposes no item or mount grant endpoint.
+Without that variable, the item runtime follows its existing behavior.
+The trace compiles with warnings treated as errors; live input capture is pending.

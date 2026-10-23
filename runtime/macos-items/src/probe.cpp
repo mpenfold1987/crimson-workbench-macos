@@ -21,6 +21,7 @@ std::uintptr_t actor_vtable{};
 std::intptr_t image_slide{};
 Queue* queue{};
 std::atomic<bool> enabled{};
+bool trace_mount_registration{};
 
 bool read_word(std::uintptr_t address, std::uintptr_t& value) {
     mach_vm_size_t size{};
@@ -47,6 +48,26 @@ std::uintptr_t verified_holder(void* task, void* context, std::uint32_t& key) {
 }
 
 std::uint32_t hook(void* task, void* context) {
+    if (trace_mount_registration) {
+        std::uintptr_t packet{}, actor{}, component{}, manager{};
+        const bool readable = context
+            && read_word(reinterpret_cast<std::uintptr_t>(context)+0x18, packet)
+            && read_word(reinterpret_cast<std::uintptr_t>(context), actor)
+            && read_word(actor+0x108, component)
+            && read_word(component+0x110, manager);
+        std::fprintf(stderr, "CW_MAC_MOUNTS: registration readable=%d actor=%llx manager=%llx packet=",
+            readable, static_cast<unsigned long long>(actor), static_cast<unsigned long long>(manager));
+        unsigned char bytes[64]{};
+        mach_vm_size_t size{};
+        if (packet && mach_vm_read_overwrite(mach_task_self(), packet, sizeof(bytes),
+            reinterpret_cast<mach_vm_address_t>(bytes), &size) == KERN_SUCCESS) {
+            for (std::size_t i = 0; i < size; ++i) std::fprintf(stderr, "%02x", bytes[i]);
+        }
+        const auto result = original(task, context);
+        std::fprintf(stderr, " result=%u; observation only.\n", result);
+        std::fflush(stderr);
+        return result;
+    }
     const auto result = original(task, context);
     if (result != 0 || !enabled.load(std::memory_order_acquire)) return result;
     try {
@@ -137,8 +158,11 @@ __attribute__((constructor)) void initialize() {
     }
     const auto slide = _dyld_get_image_vmaddr_slide(image);
     image_slide = slide;
-    auto slot = reinterpret_cast<std::uintptr_t*>(0x107e3e3f8ULL + slide);
-    const auto target = 0x10098d510ULL + slide;
+    const char* trace = std::getenv("CW_MAC_MOUNT_TRACE");
+    trace_mount_registration = trace && std::strcmp(trace, "1") == 0;
+    auto slot = reinterpret_cast<std::uintptr_t*>(
+        (trace_mount_registration ? 0x107e44158ULL : 0x107e3e3f8ULL) + slide);
+    const auto target = (trace_mount_registration ? 0x1009f9ce0ULL : 0x10098d510ULL) + slide;
     std::uintptr_t current{};
     if (!read_word(reinterpret_cast<std::uintptr_t>(slot), current) || current != target) {
         std::fputs("CW_MAC_ITEMS: movement dispatch differs; no hook installed.\n", stderr);
@@ -174,6 +198,10 @@ __attribute__((constructor)) void initialize() {
         std::atomic_ref<std::uintptr_t>(*slot).store(current, std::memory_order_release);
         mach_vm_protect(mach_task_self(), page, vm_page_size, false, info.protection);
         std::fputs("CW_MAC_ITEMS: protection restoration failed; observer removed.\n", stderr);
+        return;
+    }
+    if (trace_mount_registration) {
+        std::fputs("CW_MAC_MOUNTS: observing normal registration; item grants disabled.\n", stderr);
         return;
     }
     enabled.store(true, std::memory_order_release);

@@ -22,7 +22,7 @@ Adding ten masks while the game is running. This recording shows an earlier Work
 - **Mod management:** browse the bundled marketplace and review each feature's availability.
 - **Backups and recovery:** take a verified save backup before a live inventory request.
 
-See the [Marketplace guide](docs/MARKETPLACE.md) for individual mods and limits, or the [documentation index](docs/README.md) for detailed guides.
+See the [macOS guide](docs/MACOS.md) and [inventory-spawning guide](docs/MACOS_ITEMS.md) for limits and technical details.
 
 ## Planned for macOS
 
@@ -42,8 +42,8 @@ requests, and creates a verified backup before it starts the game for one.
 
 The interface is in English. Item names follow the installed Steam language when
 detected, with English as the fallback and a manual language selector. After a
-game update, live functionality may need an update too; check
-[build support](docs/BUILD_SUPPORT.md) before using a different build.
+game update, live functionality may need an update too. Do not use live features
+until the new build is explicitly supported.
 
 ## Contribute
 

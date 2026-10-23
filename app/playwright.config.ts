@@ -1,6 +1,6 @@
 import { defineConfig } from '@playwright/test';
 
-// Keep Windows CI on Edge; allow Chromium on machines without Edge.
+// Use Chromium consistently in local and macOS CI runs.
 const channel = process.env.PLAYWRIGHT_CHANNEL ?? (process.platform === 'win32' ? 'msedge' : 'chromium');
 
 export default defineConfig({

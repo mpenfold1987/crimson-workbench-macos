@@ -20,13 +20,13 @@ Apple Silicon `.app` and `.dmg` on macOS 15 or later.
 The catalog admits only exact matches for the checked-in table and localization
 hashes. Every base table and the selected item localization are verified before
 semantic parsing; crafting and icon tables have their own existing hash checks.
-The Mac data reference is Windows build 1.0.0.2976. No Windows executable version
-is invented, and a matching catalog does not certify a vanilla installation.
-The Mac schema has its own cache identity. Future game updates may be rejected.
+The Mac data reference is pinned to the checked native game build. A matching
+catalog does not certify a vanilla installation, and the Mac schema has its own
+cache identity. Future game updates may be rejected.
 
 ## Unsupported
 
-Game-file application/restoration, save edits, runtime marketplace modules,
+Game-file application/restoration, save edits other than mount registration, runtime marketplace modules,
 Extra Sockets, teleport, photo controls, and live world controls.
 The existing process and executable guards continue to reject these operations
 on macOS. Some upstream controls remain visible but cannot perform these actions.
@@ -84,5 +84,20 @@ cargo run --locked -p cd-core --example inspect_mac_compatibility -- \
   "/path/to/CrimsonDesert_Steam.app/Contents/Resources/packages"
 ```
 
-The original live tests requiring private Windows fixtures remain ignored by
-default. Their status is separate from the Mac integration test above.
+Legacy live tests requiring private platform fixtures remain ignored by default.
+Their status is separate from the Mac integration test above.
+
+
+## Mount registration
+
+The Mounts screen can register mounts in a selected complete save.save/lobby.save
+pair while the game is closed. Each operation validates the catalog schema and
+save hashes, backs up both files, journals its candidate and receipt, and checks
+the written pair. Retrying a pending request uses the same ID without granting
+another mount. Interrupted writes can be recovered from that journal.
+
+Keep the game closed until registration finishes. macOS file locks serialize
+Workbench writers; they do not stop Steam from launching the game or prevent
+Steam Cloud from writing. Changed save generations are rejected rather than
+overwritten. Backups are recorded in the registration receipt. Base-entry mounts
+still require in-game summoning and riding verification.

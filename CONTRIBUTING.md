@@ -4,25 +4,25 @@ Contributions are welcome: bug fixes, UI improvements, documentation, format res
 
 ## Before you start
 
-Search [existing issues](https://github.com/ArasHueseyin/crimson-workbench/issues) and [pull requests](https://github.com/ArasHueseyin/crimson-workbench/pulls). Use the [issue forms](https://github.com/ArasHueseyin/crimson-workbench/issues/new/choose) for bugs, feature requests, mod requests or feedback. For a large change or a new native hook, discuss the intended behavior and compatibility limits in an issue first. Small fixes can go straight to a PR.
+Search [existing issues](https://github.com/mpenfold1987/crimson-workbench-macos/issues) and [pull requests](https://github.com/mpenfold1987/crimson-workbench-macos/pulls). Use the [issue forms](https://github.com/mpenfold1987/crimson-workbench-macos/issues/new/choose) for bugs, feature requests, mod requests or feedback. For a large change or a new native hook, discuss the intended behavior and compatibility limits in an issue first. Small fixes can go straight to a PR.
 
-See [Development](docs/DEVELOPMENT.md) for requirements, setup, the code map and checks. The [documentation index](docs/README.md) separates user guides from older research notes.
+See the [macOS build guide](docs/MACOS.md) and [inventory-spawning guide](docs/MACOS_ITEMS.md) for setup, supported behavior and checks.
 
 ## Pull request workflow
 
-1. Fork the repository and create a focused branch from `master` in your fork. Maintainers can use a branch in this repository.
+1. Fork the repository and create a focused branch from the default branch in your fork. Maintainers can use a branch in this repository.
 2. Make the smallest change that solves the problem. Keep unrelated formatting and generated files out of the diff.
-3. Run checks for the affected layers using the [test guide](docs/DEVELOPMENT.md#checks). Add a regression test for a bug when it meaningfully protects the behavior. Documentation-only changes need a link and preview check, not a full native build.
-4. Open a PR against `master`. Describe the problem, resulting behavior and validation. Include screenshots for visible UI changes, and distinguish automated checks from actual in-game tests.
+3. Run checks for the affected layers: `cargo test --workspace --locked`, `make -C runtime/macos-items all test`, and the relevant `npm` checks in `app/`. Add a regression test for a bug when it meaningfully protects the behavior.
+4. Open a PR against the default branch. Describe the problem, resulting behavior and validation. Include screenshots for visible UI changes, and distinguish automated checks from actual in-game tests.
 
-`master` requires a PR and successful `test (windows-2022)` and `test (ubuntu-latest)` checks. The branch must be up to date before merging. Force pushes and deletion are blocked; a second maintainer's approval is not required.
+The macOS workflow must pass before merging.
 
 ## Code and documentation conventions
 
 - Write new UI text, documentation, issues and PR descriptions in English. Preserve the user's selected item language when displaying game content.
 - Follow the surrounding code and `.editorconfig`. Rust is formatted with `cargo fmt --all`. There is currently no repository-wide TypeScript/C++ formatter; avoid unrelated reformatting.
-- Keep reusable parsing, validation and change planning in `cd-core`; keep Tauri commands and UI code focused on their respective boundaries. See the [code map](docs/DEVELOPMENT.md#code-map).
-- Update the relevant feature guide when changing behavior, installation requirements or supported builds. Describe unverified behavior as unverified.
+- Keep reusable parsing, validation and change planning in `cd-core`; keep Tauri commands and UI code focused on their respective boundaries.
+- Update the macOS guides when changing behavior, installation requirements or supported builds. Describe unverified behavior as unverified.
 - Retain upstream credits and license notices. Document the source and license of any new dependency or borrowed code in `THIRD_PARTY_NOTICES.md` and `licenses/` as appropriate.
 
 ## Game data and write operations

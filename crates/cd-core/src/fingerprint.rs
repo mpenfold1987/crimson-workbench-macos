@@ -11,9 +11,9 @@ use std::{
 };
 
 pub const SCHEMA_ID: &str = "steam-25381195-gamedata-2.3-v2";
-const OBSERVATION: &str = include_str!("../../../docs/builds/steam-25381195.observed.json");
-const UPDATE_OBSERVATION: &str = include_str!("../../../docs/builds/steam-25455892.observed.json");
-const CURRENT_OBSERVATION: &str = include_str!("../../../docs/builds/steam-25477059.observed.json");
+const OBSERVATION: &str = include_str!("../schemas/steam-25381195.observed.json");
+const UPDATE_OBSERVATION: &str = include_str!("../schemas/steam-25455892.observed.json");
+const CURRENT_OBSERVATION: &str = include_str!("../schemas/steam-25477059.observed.json");
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct FileHash {

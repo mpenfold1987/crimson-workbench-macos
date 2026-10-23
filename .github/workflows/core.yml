@@ -1,18 +1,14 @@
-name: Core
+name: macOS
 on: [push, pull_request]
 permissions:
   contents: read
 concurrency:
-  group: core-${{ github.workflow }}-${{ github.ref }}
+  group: macos-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   test:
     timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-2022, ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -20,9 +16,6 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: app/package-lock.json
-      - name: Linux desktop dependencies
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev patchelf
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
@@ -33,18 +26,5 @@ jobs:
       - run: cargo test --workspace --locked -- --nocapture
       - run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - run: cargo build -p app --features custom-protocol --locked
-      - name: Isolated repair action and native contracts (no game files)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: ./runtime/repair/test.ps1
-      - name: Headless frontend flows
-        if: runner.os == 'Windows'
-        working-directory: app
-        run: npm run test:e2e
-      - name: Native runtime and package contracts (no game files)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          ./scripts/build-native.ps1 -OutputDirectory "$env:RUNNER_TEMP/workbench-runtime"
-          ./scripts/test-runtime-package.ps1 -PackageDirectory "$env:RUNNER_TEMP/workbench-runtime"
-          ./scripts/test-marketplace-package.ps1 -PackageDirectory "$env:RUNNER_TEMP/workbench-runtime"
+      - run: make -C runtime/macos-items all test
+      - run: npm run desktop:mac --prefix app

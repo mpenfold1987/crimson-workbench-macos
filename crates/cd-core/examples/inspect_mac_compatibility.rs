@@ -11,8 +11,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .ok_or("packages directory required")?,
     );
     let current: serde_json::Value = serde_json::from_str(
-        include_str!("../../../docs/builds/steam-25477059.observed.json")
-            .trim_start_matches('\u{feff}'),
+        include_str!("../schemas/steam-25477059.observed.json").trim_start_matches('\u{feff}'),
     )?;
     let mut references: Vec<TableHash> = serde_json::from_value(current["tables"].clone())?;
     for source in [
